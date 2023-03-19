@@ -16,11 +16,14 @@
                 </div>
                 <div class="col-md-2">
                     <select name="variant" id="" class="form-control">
-                        <option selected disabled>--Select A Variant--</option>
-                        {% for variant in product_variant_list %}
-                        <option selected>
-                                <p>{{variant.variant_title}}</p>
-                        </option>
+                        {% for variant in variants %}
+                            <option disabled class="input-group-text"><b>{{variant.title}}</b></option>
+                            {% for v in variant.productvariant_set.all|dictsort:'variant_title' %}
+                            {% comment %} sorted the value and checked if vale is same or not {% endcomment %}
+                                {% ifchanged %}
+                                    <option>{{v.variant_title}}</option>
+                                {% endifchanged %}
+                            {% endfor %}
                         {% endfor %}
 
                     </select>
@@ -89,7 +92,7 @@
                         </td>
                         <td>
                             <div class="btn-group btn-group-sm">
-                                <a href="" class="btn btn-success">Edit</a>
+                                <a href="{% url 'product:update.variant' product.id %}" class="btn btn-success">Edit</a>
                             </div>
                         </td>
                     </tr>

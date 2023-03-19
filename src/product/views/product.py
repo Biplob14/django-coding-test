@@ -28,6 +28,7 @@ class ProductsView(ListView):
     def get_queryset(self):
         filter_string = {}
         for key in self.request.GET:
+            print("get key: ", key)
             if self.request.GET.get(key):
                 if key != 'page':
                     filter_string[key] = self.request.GET.get(key)
@@ -39,11 +40,13 @@ class ProductsView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        variants = Variant.objects.all()
         product_variant = ProductVariant.objects.values('variant_title').distinct()
         # product_price = ProductVariantPrice.objects.filter(price__range())
         # print("price from: ", context['price_from'])
 
         context['product_variant_list'] = product_variant
+        context['variants'] = variants
         context['product'] = True
         context['request'] = ''
         context['current_time'] = timezone.now()
